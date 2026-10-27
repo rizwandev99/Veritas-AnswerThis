@@ -14,6 +14,7 @@ from app.models.paper import Paper
 from app.services.paper_source import OpenAlexSource
 from app.services.citation_parser import segment_into_claims
 from app.services.llm_client import llm_client, build_review_prompt
+from app.services.graph import build_citation_graph
 from app.core.errors import NotFoundError, BadRequestError
 
 router = APIRouter(prefix="/reviews", tags=["Reviews"])
@@ -59,6 +60,21 @@ async def get_review(review_id: str):
     if review_id not in reviews_db:
         raise HTTPException(status_code=404, detail="Review not found")
     return reviews_db[review_id]
+
+
+@router.get("/{review_id}/graph")
+async def get_review_graph(review_id: str):
+    """
+    Returns the citation network graph ({ nodes, edges }) representing
+    cross-paper citations and verification support rates.
+    """
+    if review_id not in reviews_db:
+        raise HTTPException(status_code=404, detail="Review not found")
+
+    review = reviews_db[review_id]
+    papers = review_papers_db.get(review_id, [])
+    graph = build_citation_graph(papers, review.claims)
+    return graph
 
 
 @router.get("/{review_id}/stream")
