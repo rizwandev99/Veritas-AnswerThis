@@ -15,6 +15,8 @@ from app.services.paper_source import OpenAlexSource
 from app.services.citation_parser import segment_into_claims
 from app.services.llm_client import llm_client, build_review_prompt
 from app.services.graph import build_citation_graph
+from app.services.export import generate_bibtex, generate_markdown
+from fastapi.responses import PlainTextResponse
 from app.core.errors import NotFoundError, BadRequestError
 
 router = APIRouter(prefix="/reviews", tags=["Reviews"])
@@ -75,6 +77,25 @@ async def get_review_graph(review_id: str):
     papers = review_papers_db.get(review_id, [])
     graph = build_citation_graph(papers, review.claims)
     return graph
+
+
+@router.get("/{review_id}/bibtex", response_class=PlainTextResponse)
+async def get_review_bibtex(review_id: str):
+    """Exports BibTeX citations with LaTeX escaping for all papers cited in the review."""
+    if review_id not in reviews_db:
+        raise HTTPException(status_code=404, detail="Review not found")
+    papers = review_papers_db.get(review_id, [])
+    return PlainTextResponse(generate_bibtex(papers), media_type="text/plain")
+
+
+@router.get("/{review_id}/markdown", response_class=PlainTextResponse)
+async def get_review_markdown(review_id: str):
+    """Exports full literature review with citations, trust score, and references in Markdown."""
+    if review_id not in reviews_db:
+        raise HTTPException(status_code=404, detail="Review not found")
+    review = reviews_db[review_id]
+    papers = review_papers_db.get(review_id, [])
+    return PlainTextResponse(generate_markdown(review, papers), media_type="text/plain")
 
 
 @router.get("/{review_id}/stream")
