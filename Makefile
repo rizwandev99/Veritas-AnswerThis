@@ -84,7 +84,7 @@ smoke: ## Execute automated end-to-end smoke test script
 	$(PYTHON) scripts/smoke_test.py
 
 eval: ## Run verification engine against ground-truth evaluation fixtures
-	cd apps/api && $(PYTHON) -m app.services.verification --eval
+	$(PYTHON) scripts/eval.py
 
 clean: ## Remove build artifacts, pycache, and cache directories
 	$(PYTHON) -c "import shutil, pathlib; [shutil.rmtree(p) for p in pathlib.Path('.').rglob('__pycache__')]"
