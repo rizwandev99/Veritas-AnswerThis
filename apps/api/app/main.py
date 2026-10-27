@@ -15,6 +15,7 @@ from app.core.logging import get_logger
 from app.core.errors import VeritasError
 from app.db.session import db_manager
 from app.api.health import router as health_router
+from app.api.papers import router as papers_router
 
 logger = get_logger(__name__)
 
@@ -123,3 +124,4 @@ async def generic_exception_handler(request: Request, exc: Exception):
 
 # Register API Routers
 app.include_router(health_router, prefix="/api")
+app.include_router(papers_router, prefix="/api")

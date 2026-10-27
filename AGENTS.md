@@ -17,7 +17,8 @@
 ## Architecture & Active Context
 ### Key Architectural Decisions
 - Initialized project memory following repository setup and PRD inspection.
+- Milestone F0 completed: Decoupled monorepo scaffold (apps/web + apps/api), Linear-grade design system, anti-FOUC theme engine, Docker Compose with pgvector, GitHub Actions CI workflow, and passing test suites.
 ### Technical Gotchas & Traps
-- None recorded yet.
+- `pydantic-settings` v2 attempts `json.loads` on `List[str]` env vars; resolved by typing `Union[str, List[str]]` with comma-split fallback in validator.
 ### Active Milestone & Next Steps
-- Status: Ready to begin Milestone F0 (Scaffold, design system, Docker, CI).
+- Status: Milestone F0 committed. Proceeding to Milestone F1 (Paper Discovery & Ranking with OpenAlex, FAISS/pgvector VectorStore).
