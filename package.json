@@ -1,0 +1,17 @@
+{
+  "name": "veritas-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Veritas — Citation-Verified Literature Review Generator",
+  "workspaces": [
+    "apps/web"
+  ],
+  "scripts": {
+    "dev": "make dev",
+    "dev:web": "npm --prefix apps/web run dev",
+    "build:web": "npm --prefix apps/web run build",
+    "lint": "make lint",
+    "typecheck": "make typecheck",
+    "test": "make test"
+  }
+}

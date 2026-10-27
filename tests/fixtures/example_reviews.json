@@ -1,0 +1,781 @@
+[
+  {
+    "id": "ex_cs_transformers_ssm",
+    "discipline": "Computer Science",
+    "query": "Transformers vs State Space Models for Long-Context Reasoning",
+    "normalized_query": "transformers vs state space models for long context reasoning",
+    "summary": "Comparative architectural analysis of Mamba, RWKV, and FlashAttention in associative recall tasks and quadratic scaling trade-offs.",
+    "status": "complete",
+    "trust_score": 0.875,
+    "review_text": "## Introduction\nRecent advancements in sequence transduction have positioned State Space Models (SSMs) as compelling sub-quadratic alternatives to standard Transformer architectures [1]. While Transformers achieve strong in-context learning through self-attention, their quadratic memory footprint presents practical bottlenecks for multi-token reasoning sequences [1][2].\n\n## Sub-Quadratic State Space Architectures\nSelective state space models, notably Mamba, incorporate input-dependent selection mechanisms that enable linear-time sequence processing while maintaining expressive hidden state dynamics [2]. Unlike conventional linear attention approaches, selective SSMs dynamically modulate time-step transitions based on token content [2][3]. Empirical benchmarks show that selective state spaces effectively match Transformer perplexity on language modeling tasks up to 1M token contexts while requiring significantly reduced hardware memory [2][4].\n\n## Associative Recall and In-Context Limitations\nDespite asymptotic efficiency advantages, pure SSMs face inherent limitations in multi-hop associative recall and exact token copy tasks [3]. Transformers utilize dense key-value attention matrices that directly access prior token positions across long horizons, achieving superior retrieval precision on synthetic associative recall probes [1][3]. In contrast, recurrently compressed hidden states in SSMs experience information bottlenecking when retaining high-entropy arbitrary key-value bindings [3][5].\n\n## Hybrid Architectures and Synthesis\nTo reconcile these computational trade-offs, recent investigations propose hybrid architectures that interleave selective state space blocks with localized sliding-window or sparse attention layers [4][5]. These hybrid variants achieve near-linear throughput during autoregressive decoding while preserving Transformer-level performance on dense reasoning benchmarks [4]. Consequently, future long-context foundation models are increasingly converging toward tiered hybrid topologies rather than purely monolithic state spaces [5].",
+    "papers": [
+      {
+        "id": "paper_cs_01",
+        "source_number": 1,
+        "title": "Attention Is All You Need",
+        "authors": ["Ashish Vaswani", "Noam Shazeer", "Niki Parmar", "Jakob Uszkoreit"],
+        "year": 2017,
+        "venue": "Advances in Neural Information Processing Systems (NeurIPS)",
+        "doi": "10.5555/3295222.3295349",
+        "url": "https://arxiv.org/abs/1706.03762",
+        "abstract": "We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely. Experiments on two machine translation tasks show these models to be superior in quality while being more parallelizable and requiring significantly less time to train.",
+        "citation_count": 98400,
+        "referenced_work_ids": []
+      },
+      {
+        "id": "paper_cs_02",
+        "source_number": 2,
+        "title": "Mamba: Linear-Time Sequence Modeling with Selective State Spaces",
+        "authors": ["Albert Gu", "Tri Dao"],
+        "year": 2023,
+        "venue": "arXiv preprint",
+        "doi": "10.48550/arXiv.2312.00752",
+        "url": "https://arxiv.org/abs/2312.00752",
+        "abstract": "We introduce Mamba, a selective state space architecture that addresses the computational inefficiency of Transformers on long sequences by making SSM parameters functions of the input, enabling discrete selective state filtering with linear-time computation and fast inference.",
+        "citation_count": 2150,
+        "referenced_work_ids": ["paper_cs_01"]
+      },
+      {
+        "id": "paper_cs_03",
+        "source_number": 3,
+        "title": "Hungry Hungry Hippos: Towards Language Modeling with State Space Models",
+        "authors": ["Daniel Y. Fu", "Tri Dao", "Khaled K. Saab", "Arman Azad"],
+        "year": 2022,
+        "venue": "International Conference on Learning Representations (ICLR)",
+        "doi": "10.48550/arXiv.2212.14052",
+        "url": "https://arxiv.org/abs/2212.14052",
+        "abstract": "We explore expressivity boundaries of linear time sequence models. We show that while H3 matches Transformers on standard language modeling, pure recurrent state spaces face fundamental expressivity trade-offs in associative recall tasks compared to dense multi-head attention.",
+        "citation_count": 680,
+        "referenced_work_ids": ["paper_cs_01"]
+      },
+      {
+        "id": "paper_cs_04",
+        "source_number": 4,
+        "title": "FlashAttention-2: Faster Attention with Better Parallelism and Work Partitioning",
+        "authors": ["Tri Dao"],
+        "year": 2023,
+        "venue": "International Conference on Learning Representations (ICLR)",
+        "doi": "10.48550/arXiv.2307.08691",
+        "url": "https://arxiv.org/abs/2307.08691",
+        "abstract": "FlashAttention-2 significantly speeds up attention and reduces memory access overhead on modern GPUs, achieving 2x speedup over FlashAttention and enabling practical Transformer context window scaling up to 64k tokens without algorithmic approximations.",
+        "citation_count": 1420,
+        "referenced_work_ids": ["paper_cs_01", "paper_cs_02"]
+      },
+      {
+        "id": "paper_cs_05",
+        "source_number": 5,
+        "title": "Griffin: Mixing Gated Linear Recurrences with Local Attention for Efficient Language Models",
+        "authors": ["Soham De", "Samuel L. Smith", "Anushan Fernando", "Aleksandar Botev"],
+        "year": 2024,
+        "venue": "arXiv preprint",
+        "doi": "10.48550/arXiv.2402.19427",
+        "url": "https://arxiv.org/abs/2402.19427",
+        "abstract": "We propose Griffin and Hawk, hybrid architectures combining gated linear recurrences with local sliding-window attention. Griffin matches Llama-2 performance while training with significantly lower compute and offering vastly superior decoding latency on long sequences.",
+        "citation_count": 310,
+        "referenced_work_ids": ["paper_cs_01", "paper_cs_02", "paper_cs_03"]
+      }
+    ],
+    "claims": [
+      {
+        "id": "cs_claim_1",
+        "review_id": "ex_cs_transformers_ssm",
+        "position": 1,
+        "section": "Introduction",
+        "text": "Recent advancements in sequence transduction have positioned State Space Models (SSMs) as compelling sub-quadratic alternatives to standard Transformer architectures [1].",
+        "cited_numbers": [1],
+        "flags": {"uncited": false, "invalid_citation": false},
+        "final_verdict": "supported",
+        "final_confidence": 0.92,
+        "verifications": [
+          {
+            "source_number": 1,
+            "verdict": "supported",
+            "confidence": 0.92,
+            "evidence_quote": "dispensing with recurrence and convolutions entirely",
+            "explanation": "Attention mechanisms are introduced to overcome recurrence bottlenecks."
+          }
+        ]
+      },
+      {
+        "id": "cs_claim_2",
+        "review_id": "ex_cs_transformers_ssm",
+        "position": 2,
+        "section": "Sub-Quadratic State Space Architectures",
+        "text": "Selective state space models, notably Mamba, incorporate input-dependent selection mechanisms that enable linear-time sequence processing while maintaining expressive hidden state dynamics [2].",
+        "cited_numbers": [2],
+        "flags": {"uncited": false, "invalid_citation": false},
+        "final_verdict": "supported",
+        "final_confidence": 0.95,
+        "verifications": [
+          {
+            "source_number": 2,
+            "verdict": "supported",
+            "confidence": 0.95,
+            "evidence_quote": "making SSM parameters functions of the input, enabling discrete selective state filtering with linear-time computation",
+            "explanation": "Directly supported by Mamba's input-dependent parameter formulation."
+          }
+        ]
+      },
+      {
+        "id": "cs_claim_3",
+        "review_id": "ex_cs_transformers_ssm",
+        "position": 3,
+        "section": "Associative Recall and In-Context Limitations",
+        "text": "Despite asymptotic efficiency advantages, pure SSMs face inherent limitations in multi-hop associative recall and exact token copy tasks [3].",
+        "cited_numbers": [3],
+        "flags": {"uncited": false, "invalid_citation": false},
+        "final_verdict": "supported",
+        "final_confidence": 0.91,
+        "verifications": [
+          {
+            "source_number": 3,
+            "verdict": "supported",
+            "confidence": 0.91,
+            "evidence_quote": "pure recurrent state spaces face fundamental expressivity trade-offs in associative recall tasks",
+            "explanation": "Matches the findings of the H3 paper on associative recall limitations."
+          }
+        ]
+      },
+      {
+        "id": "cs_claim_4",
+        "review_id": "ex_cs_transformers_ssm",
+        "position": 4,
+        "section": "Hybrid Architectures and Synthesis",
+        "text": "To reconcile these computational trade-offs, recent investigations propose hybrid architectures that interleave selective state space blocks with localized sliding-window or sparse attention layers [4][5].",
+        "cited_numbers": [4, 5],
+        "flags": {"uncited": false, "invalid_citation": false},
+        "final_verdict": "partial",
+        "final_confidence": 0.82,
+        "verifications": [
+          {
+            "source_number": 4,
+            "verdict": "partial",
+            "confidence": 0.78,
+            "evidence_quote": "speedup over FlashAttention and enabling practical Transformer context window scaling",
+            "explanation": "FlashAttention scales attention directly rather than constructing a state-space hybrid."
+          },
+          {
+            "source_number": 5,
+            "verdict": "supported",
+            "confidence": 0.94,
+            "evidence_quote": "hybrid architectures combining gated linear recurrences with local sliding-window attention",
+            "explanation": "Griffin explicitly proposes the hybrid state space and local attention approach."
+          }
+        ]
+      }
+    ],
+    "graph": {
+      "nodes": [
+        {"id": "paper_cs_01", "source_number": 1, "title": "Attention Is All You Need", "year": 2017, "citation_count": 98400, "radius": 44.0, "status_color": "success", "verification_stats": {"supported": 1, "partial": 0, "unsupported": 0}, "is_bridge": false},
+        {"id": "paper_cs_02", "source_number": 2, "title": "Mamba: Linear-Time Sequence Modeling with Selective State Spaces", "year": 2023, "citation_count": 2150, "radius": 28.5, "status_color": "success", "verification_stats": {"supported": 1, "partial": 0, "unsupported": 0}, "is_bridge": false},
+        {"id": "paper_cs_03", "source_number": 3, "title": "Hungry Hungry Hippos: Towards Language Modeling with SSMs", "year": 2022, "citation_count": 680, "radius": 22.0, "status_color": "success", "verification_stats": {"supported": 1, "partial": 0, "unsupported": 0}, "is_bridge": false},
+        {"id": "paper_cs_04", "source_number": 4, "title": "FlashAttention-2", "year": 2023, "citation_count": 1420, "radius": 26.0, "status_color": "warning", "verification_stats": {"supported": 0, "partial": 1, "unsupported": 0}, "is_bridge": false},
+        {"id": "paper_cs_05", "source_number": 5, "title": "Griffin: Mixing Recurrences with Attention", "year": 2024, "citation_count": 310, "radius": 19.5, "status_color": "success", "verification_stats": {"supported": 1, "partial": 0, "unsupported": 0}, "is_bridge": false}
+      ],
+      "edges": [
+        {"source": "paper_cs_02", "target": "paper_cs_01"},
+        {"source": "paper_cs_03", "target": "paper_cs_01"},
+        {"source": "paper_cs_04", "target": "paper_cs_01"},
+        {"source": "paper_cs_04", "target": "paper_cs_02"},
+        {"source": "paper_cs_05", "target": "paper_cs_01"},
+        {"source": "paper_cs_05", "target": "paper_cs_02"},
+        {"source": "paper_cs_05", "target": "paper_cs_03"}
+      ]
+    },
+    "created_at": "2026-10-27T00:00:00Z"
+  },
+  {
+    "id": "ex_bio_crispr_mitigation",
+    "discipline": "Biology",
+    "query": "CRISPR-Cas9 Off-Target Effects and Mitigation Strategies",
+    "normalized_query": "crispr cas9 off target effects and mitigation strategies",
+    "summary": "Mechanisms of off-target endonuclease cleavage and structural protein engineering of high-fidelity Cas9 variants.",
+    "status": "complete",
+    "trust_score": 0.92,
+    "review_text": "## Introduction\nEngineered CRISPR-Cas9 ribonucleoprotein systems enable targeted genomic editing across eukaryotic genomes [1]. However, non-specific binding and off-target cleavage at non-homologous loci represent significant safety barriers for clinical therapeutics [1][2].\n\n## Mechanisms of Unintended Cleavage\nCas9 tolerates multiple base-pair mismatches between the single-guide RNA (sgRNA) and target genomic DNA, particularly when mismatches reside outside the 8-12 base-pair seed region proximal to the protospacer adjacent motif (PAM) [1][3]. Structural studies reveal that stabilizing contacts between the Cas9 protein and the DNA target allow high conformational flexibility during non-target strand displacement [2][3]. Consequently, cell lines often exhibit unintended double-strand breaks at sites sharing as few as 14 matching nucleotides [3].\n\n## High-Fidelity Engineered Nucleases\nTo eliminate spurious cleavage while preserving high on-target potency, structural biologists have engineered high-fidelity Cas9 variants including SpCas9-HF1, eSpCas9(1.1), and HypaCas9 [2][4]. By mutating non-specific DNA-contacting residues (such as N497A, R661A, Q695A, and Q926A), these variants weaken electrostatic contacts with the non-target strand, thereby enforcing a more stringent conformational threshold for catalytic activation [4]. Genome-wide cleavage profiling using GUIDE-seq demonstrates undetectable off-target events across previously sensitive loci [4][5].\n\n## Delivery Strategies and Chemical Modifications\nBeyond protein mutations, titrating nuclease exposure via transient delivery of Cas9 ribonucleoprotein (RNP) complexes dramatically curtails off-target exposure times compared to constitutive plasmid expression [5]. Chemical modifications of sgRNA 5' termini, such as 2'-O-methyl and phosphorothioate backbones, further diminish off-target binding kinetics without impeding catalytic cleavage rates [1][5].",
+    "papers": [
+      {
+        "id": "paper_bio_01",
+        "source_number": 1,
+        "title": "A programmable dual-RNA-guided DNA endonuclease in adaptive bacterial immunity",
+        "authors": ["Martin Jinek", "Krzysztof Chylinski", "Ines Fonfara", "Jennifer A. Doudna", "Emmanuelle Charpentier"],
+        "year": 2012,
+        "venue": "Science",
+        "doi": "10.1126/science.1225829",
+        "url": "https://doi.org/10.1126/science.1225829",
+        "abstract": "We show that dual-RNA-guided Cas9 is an endonuclease that can be programmed with single chimeric RNAs to cleave double-stranded DNA target sites, establishing a flexible facility for targeted genome editing.",
+        "citation_count": 18200,
+        "referenced_work_ids": []
+      },
+      {
+        "id": "paper_bio_02",
+        "source_number": 2,
+        "title": "High-fidelity CRISPR-Cas9 variants with undetectable genome-wide off-targets",
+        "authors": ["Benjamin P. Kleinstiver", "Vikram Pattanayak", "Michelle S. Prew", "J. Keith Joung"],
+        "year": 2016,
+        "venue": "Nature",
+        "doi": "10.1038/nature16526",
+        "url": "https://doi.org/10.1038/nature16526",
+        "abstract": "We engineered SpCas9-HF1, an engineered high-fidelity variant designed to reduce non-specific DNA contacts. SpCas9-HF1 shows undetectable genome-wide off-target effects across standard human cell line loci while retaining on-target activities comparable to wild-type Cas9.",
+        "citation_count": 2980,
+        "referenced_work_ids": ["paper_bio_01"]
+      },
+      {
+        "id": "paper_bio_03",
+        "source_number": 3,
+        "title": "Conformational control of DNA target cleavage by CRISPR-Cas9",
+        "authors": ["Christopher D. Richardson", "G. J. Ray", "M. A. DeWitt", "G. L. Curie", "J. E. Corn"],
+        "year": 2016,
+        "venue": "Nature Biotechnology",
+        "doi": "10.1038/nbt.3481",
+        "url": "https://doi.org/10.1038/nbt.3481",
+        "abstract": "We characterize the conformational transitions during Cas9 target binding and non-target strand displacement, demonstrating how mismatch tolerance in distal protospacer positions triggers off-target double strand breaks.",
+        "citation_count": 790,
+        "referenced_work_ids": ["paper_bio_01"]
+      },
+      {
+        "id": "paper_bio_04",
+        "source_number": 4,
+        "title": "Rationally engineered Cas9 nucleases with improved specificity",
+        "authors": ["Ian M. Slaymaker", "Luhan Gao", "B. Zetsche", "David A. Scott", "Feng Zhang"],
+        "year": 2016,
+        "venue": "Science",
+        "doi": "10.1126/science.aad5227",
+        "url": "https://doi.org/10.1126/science.aad5227",
+        "abstract": "We structurally designed eSpCas9 variants that neutralize positively charged residues in the non-target strand groove. These modifications enhance cleavage specificity and prevent off-target strand separation.",
+        "citation_count": 2410,
+        "referenced_work_ids": ["paper_bio_01", "paper_bio_02"]
+      },
+      {
+        "id": "paper_bio_05",
+        "source_number": 5,
+        "title": "Transient delivery of ribonucleoproteins reduces CRISPR off-target mutations",
+        "authors": ["Shengdar Q. Tsai", "Zongli Zheng", "N. T. Nguyen", "M. Liebers"],
+        "year": 2015,
+        "venue": "Nature Biotechnology",
+        "doi": "10.1038/nbt.3117",
+        "url": "https://doi.org/10.1038/nbt.3117",
+        "abstract": "We demonstrate that delivering Cas9 as purified ribonucleoprotein (RNP) complexes limits exposure duration in mammalian cells, substantially decreasing off-target events compared to persistent expression vectors without sacrificing on-target efficiency.",
+        "citation_count": 1640,
+        "referenced_work_ids": ["paper_bio_01", "paper_bio_02", "paper_bio_04"]
+      }
+    ],
+    "claims": [
+      {
+        "id": "bio_claim_1",
+        "review_id": "ex_bio_crispr_mitigation",
+        "position": 1,
+        "section": "Introduction",
+        "text": "Engineered CRISPR-Cas9 ribonucleoprotein systems enable targeted genomic editing across eukaryotic genomes [1].",
+        "cited_numbers": [1],
+        "flags": {"uncited": false, "invalid_citation": false},
+        "final_verdict": "supported",
+        "final_confidence": 0.96,
+        "verifications": [
+          {
+            "source_number": 1,
+            "verdict": "supported",
+            "confidence": 0.96,
+            "evidence_quote": "establishing a flexible facility for targeted genome editing",
+            "explanation": "Directly supports the programmable genome editing capability of Cas9."
+          }
+        ]
+      },
+      {
+        "id": "bio_claim_2",
+        "review_id": "ex_bio_crispr_mitigation",
+        "position": 2,
+        "section": "High-Fidelity Engineered Nucleases",
+        "text": "By mutating non-specific DNA-contacting residues (such as N497A, R661A, Q695A, and Q926A), these variants weaken electrostatic contacts with the non-target strand, thereby enforcing a more stringent conformational threshold for catalytic activation [4].",
+        "cited_numbers": [4],
+        "flags": {"uncited": false, "invalid_citation": false},
+        "final_verdict": "supported",
+        "final_confidence": 0.94,
+        "verifications": [
+          {
+            "source_number": 4,
+            "verdict": "supported",
+            "confidence": 0.94,
+            "evidence_quote": "neutralize positively charged residues in the non-target strand groove",
+            "explanation": "Supported by the structural neutralization of groove residues."
+          }
+        ]
+      },
+      {
+        "id": "bio_claim_3",
+        "review_id": "ex_bio_crispr_mitigation",
+        "position": 3,
+        "section": "Delivery Strategies and Chemical Modifications",
+        "text": "Beyond protein mutations, titrating nuclease exposure via transient delivery of Cas9 ribonucleoprotein (RNP) complexes dramatically curtails off-target exposure times compared to constitutive plasmid expression [5].",
+        "cited_numbers": [5],
+        "flags": {"uncited": false, "invalid_citation": false},
+        "final_verdict": "supported",
+        "final_confidence": 0.95,
+        "verifications": [
+          {
+            "source_number": 5,
+            "verdict": "supported",
+            "confidence": 0.95,
+            "evidence_quote": "delivering Cas9 as purified ribonucleoprotein (RNP) complexes limits exposure duration in mammalian cells, substantially decreasing off-target events",
+            "explanation": "Matches abstract evidence regarding RNP delivery limiting exposure time."
+          }
+        ]
+      }
+    ],
+    "graph": {
+      "nodes": [
+        {"id": "paper_bio_01", "source_number": 1, "title": "A programmable dual-RNA-guided DNA endonuclease", "year": 2012, "citation_count": 18200, "radius": 42.0, "status_color": "success", "verification_stats": {"supported": 1, "partial": 0, "unsupported": 0}, "is_bridge": false},
+        {"id": "paper_bio_02", "source_number": 2, "title": "High-fidelity CRISPR-Cas9 variants", "year": 2016, "citation_count": 2980, "radius": 31.0, "status_color": "success", "verification_stats": {"supported": 0, "partial": 0, "unsupported": 0}, "is_bridge": false},
+        {"id": "paper_bio_03", "source_number": 3, "title": "Conformational control of DNA target cleavage", "year": 2016, "citation_count": 790, "radius": 23.0, "status_color": "neutral", "verification_stats": {"supported": 0, "partial": 0, "unsupported": 0}, "is_bridge": false},
+        {"id": "paper_bio_04", "source_number": 4, "title": "Rationally engineered Cas9 nucleases", "year": 2016, "citation_count": 2410, "radius": 29.5, "status_color": "success", "verification_stats": {"supported": 1, "partial": 0, "unsupported": 0}, "is_bridge": false},
+        {"id": "paper_bio_05", "source_number": 5, "title": "Transient delivery of ribonucleoproteins", "year": 2015, "citation_count": 1640, "radius": 27.0, "status_color": "success", "verification_stats": {"supported": 1, "partial": 0, "unsupported": 0}, "is_bridge": false}
+      ],
+      "edges": [
+        {"source": "paper_bio_02", "target": "paper_bio_01"},
+        {"source": "paper_bio_03", "target": "paper_bio_01"},
+        {"source": "paper_bio_04", "target": "paper_bio_01"},
+        {"source": "paper_bio_04", "target": "paper_bio_02"},
+        {"source": "paper_bio_05", "target": "paper_bio_01"},
+        {"source": "paper_bio_05", "target": "paper_bio_02"},
+        {"source": "paper_bio_05", "target": "paper_bio_04"}
+      ]
+    },
+    "created_at": "2026-10-27T00:00:00Z"
+  },
+  {
+    "id": "ex_med_glp1_cardio",
+    "discipline": "Medicine",
+    "query": "GLP-1 Receptor Agonists in Cardiovascular Outcomes Beyond Diabetes",
+    "normalized_query": "glp 1 receptor agonists in cardiovascular outcomes beyond diabetes",
+    "summary": "Clinical trial evidence evaluating cardiovascular risk reduction, heart failure preservation, and metabolic endpoints with semaglutide.",
+    "status": "complete",
+    "trust_score": 0.90,
+    "review_text": "## Introduction\nGlucagon-like peptide-1 (GLP-1) receptor agonists, originally approved for glycemic management in type 2 diabetes mellitus, demonstrate robust cardioprotective benefits in broad patient populations [1]. Emerging landmark clinical trials suggest that cardiovascular risk attenuation extends to overweight and obese individuals without baseline diabetes [1][2].\n\n## Cardioprotective Efficacy in Non-Diabetic Cohorts\nIn the landmark SELECT randomized controlled trial, weekly subcutaneous semaglutide (2.4 mg) administered to patients with overweight or obesity and preexisting cardiovascular disease achieved a statistically significant 20% relative risk reduction in major adverse cardiovascular events (MACE) [2]. The composite primary endpoint (cardiovascular death, nonfatal myocardial infarction, or nonfatal stroke) occurred in 6.5% of the semaglutide cohort versus 8.0% of placebo recipients over a mean follow-up period of nearly 40 months [2][3].\n\n## Mechanisms Beyond Glycemic Control\nThe underlying physiological mechanisms driving these benefits encompass extensive anti-inflammatory and vascular endothelial pathways [3]. GLP-1 receptor activation attenuates systemic vascular inflammation, stabilizes vulnerable atherosclerotic plaques, and improves systemic microvascular endothelial function [3][4]. Furthermore, clinical trials in patients with heart failure with preserved ejection fraction (HFpEF) demonstrated meaningful improvements in symptom burden and physical functional capacity [4][5].\n\n## Adverse Events and Tolerability Considerations\nWhile cardiovascular safety profiles remain favorable, gastrointestinal adverse events constitute the most frequent cause of treatment discontinuation [2][5]. Nausea, vomiting, and diarrhea occur predominantly during early dose-escalation phases [2]. Discontinuation rates due to gastrointestinal intolerance were reported in approximately 10% of trial participants [2][5].",
+    "papers": [
+      {
+        "id": "paper_med_01",
+        "source_number": 1,
+        "title": "Liraglutide and Cardiovascular Outcomes in Type 2 Diabetes",
+        "authors": ["Steven P. Marso", "Gilbert H. Daniels", "Kristian Brown-Frandsen", "Poul Kristensen"],
+        "year": 2016,
+        "venue": "New England Journal of Medicine",
+        "doi": "10.1056/NEJMoa1603827",
+        "url": "https://doi.org/10.1056/NEJMoa1603827",
+        "abstract": "In the LEADER trial, patients with type 2 diabetes and high cardiovascular risk treated with liraglutide had lower rates of cardiovascular death and nonfatal events compared to placebo.",
+        "citation_count": 6400,
+        "referenced_work_ids": []
+      },
+      {
+        "id": "paper_med_02",
+        "source_number": 2,
+        "title": "Semaglutide and Cardiovascular Outcomes in Obesity without Diabetes",
+        "authors": ["A. Michael Lincoff", "Kirsten Brown-Frandsen", "Helen M. Colhoun", "John Deanfield"],
+        "year": 2023,
+        "venue": "New England Journal of Medicine",
+        "doi": "10.1056/NEJMoa2307563",
+        "url": "https://doi.org/10.1056/NEJMoa2307563",
+        "abstract": "In patients with preexisting cardiovascular disease and overweight or obesity but without diabetes, once-weekly semaglutide at a dose of 2.4 mg was superior to placebo in reducing the incidence of death from cardiovascular causes, nonfatal myocardial infarction, or nonfatal stroke (hazard ratio, 0.80; 95% CI, 0.72 to 0.90; P<0.001).",
+        "citation_count": 1150,
+        "referenced_work_ids": ["paper_med_01"]
+      },
+      {
+        "id": "paper_med_03",
+        "source_number": 3,
+        "title": "Cardiovascular Actions of Glucagon-Like Peptide-1: Translating Biology to Clinical Practice",
+        "authors": ["Daniel J. Drucker"],
+        "year": 2018,
+        "venue": "Circulation",
+        "doi": "10.1161/CIRCULATIONAHA.117.028914",
+        "url": "https://doi.org/10.1161/CIRCULATIONAHA.117.028914",
+        "abstract": "We review the physiological mechanisms of GLP-1 receptor activation in the heart and blood vessels, highlighting anti-inflammatory actions, suppression of atherogenesis, and microvascular blood flow enhancement.",
+        "citation_count": 920,
+        "referenced_work_ids": ["paper_med_01"]
+      },
+      {
+        "id": "paper_med_04",
+        "source_number": 4,
+        "title": "Semaglutide in Patients with Heart Failure with Preserved Ejection Fraction and Obesity",
+        "authors": ["Mikhail N. Kosiborod", "G. Michael Felker", "Priya S. Rao"],
+        "year": 2023,
+        "venue": "New England Journal of Medicine",
+        "doi": "10.1056/NEJMoa2306963",
+        "url": "https://doi.org/10.1056/NEJMoa2306963",
+        "abstract": "In patients with heart failure with preserved ejection fraction (HFpEF) and obesity, semaglutide produced larger reductions in symptoms and physical limitations and greater exercise function than placebo.",
+        "citation_count": 580,
+        "referenced_work_ids": ["paper_med_01", "paper_med_02"]
+      },
+      {
+        "id": "paper_med_05",
+        "source_number": 5,
+        "title": "Gastrointestinal Tolerability of Incretin-Based Therapies",
+        "authors": ["Carolyn F. Deacon"],
+        "year": 2020,
+        "venue": "Diabetes, Obesity and Metabolism",
+        "doi": "10.1111/dom.14120",
+        "url": "https://doi.org/10.1111/dom.14120",
+        "abstract": "We analyze adverse event patterns of incretin mimetics, noting that transient gastrointestinal side effects occur in up to 15-20% of patients during titration phases but attenuate over prolonged maintenance.",
+        "citation_count": 240,
+        "referenced_work_ids": ["paper_med_01", "paper_med_03"]
+      }
+    ],
+    "claims": [
+      {
+        "id": "med_claim_1",
+        "review_id": "ex_med_glp1_cardio",
+        "position": 1,
+        "section": "Cardioprotective Efficacy in Non-Diabetic Cohorts",
+        "text": "In the landmark SELECT randomized controlled trial, weekly subcutaneous semaglutide (2.4 mg) administered to patients with overweight or obesity and preexisting cardiovascular disease achieved a statistically significant 20% relative risk reduction in major adverse cardiovascular events (MACE) [2].",
+        "cited_numbers": [2],
+        "flags": {"uncited": false, "invalid_citation": false},
+        "final_verdict": "supported",
+        "final_confidence": 0.97,
+        "verifications": [
+          {
+            "source_number": 2,
+            "verdict": "supported",
+            "confidence": 0.97,
+            "evidence_quote": "hazard ratio, 0.80; 95% CI, 0.72 to 0.90; P<0.001",
+            "explanation": "A hazard ratio of 0.80 corresponds directly to a 20% relative risk reduction."
+          }
+        ]
+      },
+      {
+        "id": "med_claim_2",
+        "review_id": "ex_med_glp1_cardio",
+        "position": 2,
+        "section": "Cardioprotective Efficacy in Non-Diabetic Cohorts",
+        "text": "The composite primary endpoint occurred in 6.5% of the semaglutide cohort versus 8.0% of placebo recipients over a mean follow-up period of nearly 40 months [2][3].",
+        "cited_numbers": [2, 3],
+        "flags": {"uncited": false, "invalid_citation": false},
+        "final_verdict": "supported",
+        "final_confidence": 0.95,
+        "verifications": [
+          {
+            "source_number": 2,
+            "verdict": "supported",
+            "confidence": 0.95,
+            "evidence_quote": "primary composite cardiovascular end point occurred in 6.5% of semaglutide patients versus 8.0% of placebo patients",
+            "explanation": "Exact percentage match in SELECT trial abstract."
+          },
+          {
+            "source_number": 3,
+            "verdict": "supported",
+            "confidence": 0.88,
+            "evidence_quote": "physiological mechanisms of GLP-1 receptor activation in the heart and blood vessels",
+            "explanation": "Reviews the systemic cardiovascular actions of GLP-1."
+          }
+        ]
+      }
+    ],
+    "graph": {
+      "nodes": [
+        {"id": "paper_med_01", "source_number": 1, "title": "Liraglutide and Cardiovascular Outcomes", "year": 2016, "citation_count": 6400, "radius": 37.0, "status_color": "neutral", "verification_stats": {"supported": 0, "partial": 0, "unsupported": 0}, "is_bridge": false},
+        {"id": "paper_med_02", "source_number": 2, "title": "Semaglutide and Cardiovascular Outcomes in Obesity", "year": 2023, "citation_count": 1150, "radius": 25.0, "status_color": "success", "verification_stats": {"supported": 2, "partial": 0, "unsupported": 0}, "is_bridge": false},
+        {"id": "paper_med_03", "source_number": 3, "title": "Cardiovascular Actions of GLP-1", "year": 2018, "citation_count": 920, "radius": 24.0, "status_color": "success", "verification_stats": {"supported": 1, "partial": 0, "unsupported": 0}, "is_bridge": false},
+        {"id": "paper_med_04", "source_number": 4, "title": "Semaglutide in Patients with HFpEF", "year": 2023, "citation_count": 580, "radius": 21.0, "status_color": "neutral", "verification_stats": {"supported": 0, "partial": 0, "unsupported": 0}, "is_bridge": false},
+        {"id": "paper_med_05", "source_number": 5, "title": "Gastrointestinal Tolerability of Incretin Therapies", "year": 2020, "citation_count": 240, "radius": 18.0, "status_color": "neutral", "verification_stats": {"supported": 0, "partial": 0, "unsupported": 0}, "is_bridge": false}
+      ],
+      "edges": [
+        {"source": "paper_med_02", "target": "paper_med_01"},
+        {"source": "paper_med_03", "target": "paper_med_01"},
+        {"source": "paper_med_04", "target": "paper_med_01"},
+        {"source": "paper_med_04", "target": "paper_med_02"},
+        {"source": "paper_med_05", "target": "paper_med_01"},
+        {"source": "paper_med_05", "target": "paper_med_03"}
+      ]
+    },
+    "created_at": "2026-10-27T00:00:00Z"
+  },
+  {
+    "id": "ex_phys_hydride_superconductors",
+    "discipline": "Physics",
+    "query": "Room-Temperature Superconductivity in Hydride Materials: Claims and Evidence",
+    "normalized_query": "room temperature superconductivity in hydride materials claims and evidence",
+    "summary": "Investigation into high-pressure hydride superconductivity claims, electrical transport replications, and controversies.",
+    "status": "complete",
+    "trust_score": 0.692,
+    "review_text": "## Introduction\nThe pursuit of room-temperature superconductivity represents a transformative frontier in condensed matter physics [1]. While conventional Bardeen-Cooper-Schrieffer (BCS) theory predicted that high Debye frequencies in hydrogen-rich compounds could drive elevated critical temperatures ($T_c$), early hydrides required extreme megabar pressures [1][2].\n\n## High-Pressure Hydride Benchmarks\nInitial breakthroughs in sulfur hydride ($H_3S$) confirmed superconductivity at 203 K under 155 GPa, providing direct experimental validation of phonon-mediated pairing in compressed hydrogen lattices [1]. Subsequent synthesis of lanthanum superhydride ($LaH_{10}$) elevated verified critical temperatures to approximately 250-260 K at 170 GPa [2]. These findings established that dense hydrogen clathrate cages support robust electron-phonon coupling under extreme compression [2][3].\n\n## The Nitrogen-Doped Lutetium Hydride Controversy\nIn early 2023, sensational claims reported ambient near-room-temperature superconductivity in nitrogen-doped lutetium hydride ($Lu-H-N$) at 294 K under modest pressures of 1 GPa [3]. However, independent replication efforts by multiple international consortiums failed to reproduce zero electrical resistance or magnetic flux expulsion [4][5]. Comprehensive four-probe transport measurements across independent laboratories revealed metallic behavior with absence of superconducting phase transitions [4][5]. Consequently, the initial claims faced formal retractions and severe scrutiny [5].",
+    "papers": [
+      {
+        "id": "paper_phys_01",
+        "source_number": 1,
+        "title": "Conventional superconductivity at 203 kelvin at high pressures in the sulfur hydride system",
+        "authors": ["A. P. Drozdov", "M. I. Eremets", "I. A. Troyan", "V. Ksenofontov"],
+        "year": 2015,
+        "venue": "Nature",
+        "doi": "10.1038/nature14964",
+        "url": "https://doi.org/10.1038/nature14964",
+        "abstract": "We report conventional superconductivity at 203 K in compressed sulfur hydride (H3S) at 155 GPa, confirmed via electrical resistance drop, isotope effect, and magnetic susceptibility measurements.",
+        "citation_count": 3120,
+        "referenced_work_ids": []
+      },
+      {
+        "id": "paper_phys_02",
+        "source_number": 2,
+        "title": "Superconductivity at 250 K in lanthanum hydride under high pressures",
+        "authors": ["Maddury Somayazulu", "M. Ahart", "A. K. Mishra", "Z. M. Geballe"],
+        "year": 2019,
+        "venue": "Physical Review Letters",
+        "doi": "10.1103/PhysRevLett.122.027001",
+        "url": "https://doi.org/10.1103/PhysRevLett.122.027001",
+        "abstract": "We observe superconducting transitions up to 260 K in lanthanum hydride at pressures exceeding 170 GPa, representing the highest confirmed critical temperatures in compressed clathrate structures.",
+        "citation_count": 1840,
+        "referenced_work_ids": ["paper_phys_01"]
+      },
+      {
+        "id": "paper_phys_03",
+        "source_number": 3,
+        "title": "Evidence of near-ambient superconductivity in a N-doped lutetium hydride",
+        "authors": ["Nathan Dasenbrock-Gammon", "Ranga P. Dias"],
+        "year": 2023,
+        "venue": "Nature (Retracted)",
+        "doi": "10.1038/s41586-023-05742-0",
+        "url": "https://doi.org/10.1038/s41586-023-05742-0",
+        "abstract": "We report near-ambient superconductivity at 294 K and 10 kbar in nitrogen-doped lutetium hydride, exhibiting sharp resistance drops and magnetic susceptibility transitions (Retracted).",
+        "citation_count": 450,
+        "referenced_work_ids": ["paper_phys_01", "paper_phys_02"]
+      },
+      {
+        "id": "paper_phys_04",
+        "source_number": 4,
+        "title": "Absence of near-ambient superconductivity in LuH2±xNy",
+        "authors": ["X. Ming", "Y. J. Zhang", "X. Zhu", "H. H. Wen"],
+        "year": 2023,
+        "venue": "Nature",
+        "doi": "10.1038/s41586-023-06162-w",
+        "url": "https://doi.org/10.1038/s41586-023-06162-w",
+        "abstract": "We report comprehensive electrical transport and magnetic susceptibility measurements on nitrogen-doped lutetium hydride. Across temperatures from 1.5 K to 350 K, no evidence of superconductivity or zero-resistance transitions was observed.",
+        "citation_count": 380,
+        "referenced_work_ids": ["paper_phys_01", "paper_phys_03"]
+      },
+      {
+        "id": "paper_phys_05",
+        "source_number": 5,
+        "title": "High-pressure synthesis and magnetic measurements of nitrogen-doped lutetium hydrides",
+        "authors": ["P. Savas", "G. Fabbris", "D. Haskel"],
+        "year": 2023,
+        "venue": "Physical Review B",
+        "doi": "10.1103/PhysRevB.108.184511",
+        "url": "https://doi.org/10.1103/PhysRevB.108.184511",
+        "abstract": "X-ray magnetic circular dichroism and electrical measurements on Lu-N-H samples synthesized under diamond anvil cells demonstrate regular metallic conductivity without any superconducting shielding fractions.",
+        "citation_count": 210,
+        "referenced_work_ids": ["paper_phys_01", "paper_phys_03", "paper_phys_04"]
+      }
+    ],
+    "claims": [
+      {
+        "id": "phys_claim_1",
+        "review_id": "ex_phys_hydride_superconductors",
+        "position": 1,
+        "section": "High-Pressure Hydride Benchmarks",
+        "text": "Initial breakthroughs in sulfur hydride ($H_3S$) confirmed superconductivity at 203 K under 155 GPa, providing direct experimental validation of phonon-mediated pairing in compressed hydrogen lattices [1].",
+        "cited_numbers": [1],
+        "flags": {"uncited": false, "invalid_citation": false},
+        "final_verdict": "supported",
+        "final_confidence": 0.96,
+        "verifications": [
+          {
+            "source_number": 1,
+            "verdict": "supported",
+            "confidence": 0.96,
+            "evidence_quote": "conventional superconductivity at 203 K in compressed sulfur hydride (H3S) at 155 GPa",
+            "explanation": "Directly matches confirmed discovery in Drozdov et al."
+          }
+        ]
+      },
+      {
+        "id": "phys_claim_2",
+        "review_id": "ex_phys_hydride_superconductors",
+        "position": 2,
+        "section": "The Nitrogen-Doped Lutetium Hydride Controversy",
+        "text": "Comprehensive four-probe transport measurements across independent laboratories revealed metallic behavior with absence of superconducting phase transitions [4][5].",
+        "cited_numbers": [4, 5],
+        "flags": {"uncited": false, "invalid_citation": false},
+        "final_verdict": "supported",
+        "final_confidence": 0.94,
+        "verifications": [
+          {
+            "source_number": 4,
+            "verdict": "supported",
+            "confidence": 0.94,
+            "evidence_quote": "no evidence of superconductivity or zero-resistance transitions was observed",
+            "explanation": "Supported by independent transport measurements in Ming et al."
+          },
+          {
+            "source_number": 5,
+            "verdict": "supported",
+            "confidence": 0.90,
+            "evidence_quote": "demonstrate regular metallic conductivity without any superconducting shielding fractions",
+            "explanation": "Confirmed by Savas et al."
+          }
+        ]
+      }
+    ],
+    "graph": {
+      "nodes": [
+        {"id": "paper_phys_01", "source_number": 1, "title": "Conventional superconductivity at 203 K in sulfur hydride", "year": 2015, "citation_count": 3120, "radius": 31.0, "status_color": "success", "verification_stats": {"supported": 1, "partial": 0, "unsupported": 0}, "is_bridge": false},
+        {"id": "paper_phys_02", "source_number": 2, "title": "Superconductivity at 250 K in lanthanum hydride", "year": 2019, "citation_count": 1840, "radius": 27.5, "status_color": "neutral", "verification_stats": {"supported": 0, "partial": 0, "unsupported": 0}, "is_bridge": false},
+        {"id": "paper_phys_03", "source_number": 3, "title": "Evidence of near-ambient superconductivity in Lu-N-H (Retracted)", "year": 2023, "citation_count": 450, "radius": 20.0, "status_color": "danger", "verification_stats": {"supported": 0, "partial": 0, "unsupported": 1}, "is_bridge": false},
+        {"id": "paper_phys_04", "source_number": 4, "title": "Absence of near-ambient superconductivity in LuH2±xNy", "year": 2023, "citation_count": 380, "radius": 19.5, "status_color": "success", "verification_stats": {"supported": 1, "partial": 0, "unsupported": 0}, "is_bridge": false},
+        {"id": "paper_phys_05", "source_number": 5, "title": "High-pressure synthesis and magnetic measurements of Lu-N-H", "year": 2023, "citation_count": 210, "radius": 17.5, "status_color": "success", "verification_stats": {"supported": 1, "partial": 0, "unsupported": 0}, "is_bridge": false}
+      ],
+      "edges": [
+        {"source": "paper_phys_02", "target": "paper_phys_01"},
+        {"source": "paper_phys_03", "target": "paper_phys_01"},
+        {"source": "paper_phys_03", "target": "paper_phys_02"},
+        {"source": "paper_phys_04", "target": "paper_phys_01"},
+        {"source": "paper_phys_04", "target": "paper_phys_03"},
+        {"source": "paper_phys_05", "target": "paper_phys_01"},
+        {"source": "paper_phys_05", "target": "paper_phys_03"},
+        {"source": "paper_phys_05", "target": "paper_phys_04"}
+      ]
+    },
+    "created_at": "2026-10-27T00:00:00Z"
+  },
+  {
+    "id": "ex_econ_ubi_labor",
+    "discipline": "Economics",
+    "query": "Universal Basic Income and Labor Market Participation: Empirical Evidence",
+    "normalized_query": "universal basic income and labor market participation empirical evidence",
+    "summary": "Synthesis of randomized cash transfer trials in Alaska, Finland, and municipal cohorts evaluating labor supply responses.",
+    "status": "complete",
+    "trust_score": 0.80,
+    "review_text": "## Introduction\nUniversal basic income (UBI) proposals guarantee unconditional, recurring cash transfers to all citizens regardless of employment status [1]. A central concern in public economics is whether unconditional income guarantees reduce aggregate labor supply or induce widespread labor force exit [1][2].\n\n## Empirical Evidence from Unconditional Cash Transfers\nEmpirical evaluations of large-scale unconditional transfer programs demonstrate that labor market withdrawals remain modest [2]. Analyzing the Alaska Permanent Fund Dividend over three decades reveals that annual unconditional dividends did not decrease full-time employment, while stimulating part-time employment in local non-tradable service sectors [2][3]. Similarly, the two-year Finnish basic income experiment reported statistically negligible changes in employment duration between treatment and control recipients, alongside documented improvements in psychological well-being and health outcomes [3][4].\n\n## Intensive vs. Extensive Labor Supply Responses\nSubgroup analyses across localized randomized trials in Stockton, California, and Kenya indicate that observed hours reductions are predominantly concentrated among secondary earners caring for young children and adolescents prolonging secondary education [4][5]. Rather than funding passive leisure, cash transfers appear to facilitate caregiving flexibility and educational investment [4]. In summary, empirical trial evidence refutes predictions of dramatic labor supply collapse under basic income regimes [5].",
+    "papers": [
+      {
+        "id": "paper_econ_01",
+        "source_number": 1,
+        "title": "Basic Income: A Radical Proposal for a Free Society and a Sane Economy",
+        "authors": ["Philippe Van Parijs", "Yannick Vanderborght"],
+        "year": 2017,
+        "venue": "Harvard University Press",
+        "doi": "10.4159/9780674978072",
+        "url": "https://doi.org/10.4159/9780674978072",
+        "abstract": "We outline the theoretical foundations and macroeconomic implications of unconditional basic income, addressing historical concerns regarding labor supply disincentives and civic participation.",
+        "citation_count": 2100,
+        "referenced_work_ids": []
+      },
+      {
+        "id": "paper_econ_02",
+        "source_number": 2,
+        "title": "The Aggregate Effect of Universal Cash Transfers on Employment: The Alaska Permanent Fund",
+        "authors": ["Damon Jones", "Ioana Marinescu"],
+        "year": 2022,
+        "venue": "American Economic Journal: Economic Policy",
+        "doi": "10.1257/pol.20190299",
+        "url": "https://doi.org/10.1257/pol.20190299",
+        "abstract": "We examine the employment effects of unconditional cash transfers from the Alaska Permanent Fund. Synthetic control estimates reveal no significant impact on full-time employment and a 1.8 percentage point increase in part-time work due to local demand stimulus.",
+        "citation_count": 520,
+        "referenced_work_ids": ["paper_econ_01"]
+      },
+      {
+        "id": "paper_econ_03",
+        "source_number": 3,
+        "title": "The Finnish Basic Income Experiment 2017-2018: Final Report",
+        "authors": ["Olli Kangas", "Signe Jauhiainen", "Minna Ylikanno"],
+        "year": 2020,
+        "venue": "Finnish Ministry of Social Affairs and Health",
+        "doi": "10.17645/pag.v9i3.4340",
+        "url": "https://doi.org/10.17645/pag.v9i3.4340",
+        "abstract": "We present the final evaluation of the nationwide Finnish basic income trial. Unconditional cash payments yielded minor employment effects (an average increase of 6 days worked per year) while significantly improving subjective well-being and health.",
+        "citation_count": 410,
+        "referenced_work_ids": ["paper_econ_01", "paper_econ_02"]
+      },
+      {
+        "id": "paper_econ_04",
+        "source_number": 4,
+        "title": "Evaluating the Stockton Economic Empowerment Demonstration (SEED)",
+        "authors": ["Stacia West", "Amy Castro Baker"],
+        "year": 2021,
+        "venue": "SEED Research Report",
+        "doi": "10.1016/j.socscimed.2021.114387",
+        "url": "https://doi.org/10.1016/j.socscimed.2021.114387",
+        "abstract": "In this randomized controlled trial of guaranteed income ($500/month for 24 months), treated individuals demonstrated increased full-time employment rates (from 28% to 40%) alongside dramatic reductions in income volatility.",
+        "citation_count": 290,
+        "referenced_work_ids": ["paper_econ_01", "paper_econ_02"]
+      },
+      {
+        "id": "paper_econ_05",
+        "source_number": 5,
+        "title": "General Equilibrium Effects of Cash Transfers: Experimental Evidence from Kenya",
+        "authors": ["Dennis Egger", "Johannes Haushofer", "Edward Miguel", "Paul Niehaus"],
+        "year": 2022,
+        "venue": "Econometrica",
+        "doi": "10.3982/ECTA17945",
+        "url": "https://doi.org/10.3982/ECTA17945",
+        "abstract": "We evaluate village-level general equilibrium impacts of large cash transfers in rural Kenya. Transfers generated substantial economic fiscal multipliers (2.5) without observed labor supply reductions or inflationary wage spirals.",
+        "citation_count": 640,
+        "referenced_work_ids": ["paper_econ_01", "paper_econ_02", "paper_econ_03"]
+      }
+    ],
+    "claims": [
+      {
+        "id": "econ_claim_1",
+        "review_id": "ex_econ_ubi_labor",
+        "position": 1,
+        "section": "Empirical Evidence from Unconditional Cash Transfers",
+        "text": "Analyzing the Alaska Permanent Fund Dividend over three decades reveals that annual unconditional dividends did not decrease full-time employment, while stimulating part-time employment in local non-tradable service sectors [2][3].",
+        "cited_numbers": [2, 3],
+        "flags": {"uncited": false, "invalid_citation": false},
+        "final_verdict": "supported",
+        "final_confidence": 0.94,
+        "verifications": [
+          {
+            "source_number": 2,
+            "verdict": "supported",
+            "confidence": 0.94,
+            "evidence_quote": "no significant impact on full-time employment and a 1.8 percentage point increase in part-time work",
+            "explanation": "Supported by Alaska Permanent Fund empirical findings."
+          },
+          {
+            "source_number": 3,
+            "verdict": "partial",
+            "confidence": 0.82,
+            "evidence_quote": "minor employment effects (an average increase of 6 days worked per year)",
+            "explanation": "Finnish trial confirms minimal employment shifts, though in a European rather than Alaskan context."
+          }
+        ]
+      },
+      {
+        "id": "econ_claim_2",
+        "review_id": "ex_econ_ubi_labor",
+        "position": 2,
+        "section": "Intensive vs. Extensive Labor Supply Responses",
+        "text": "In summary, empirical trial evidence refutes predictions of dramatic labor supply collapse under basic income regimes [5].",
+        "cited_numbers": [5],
+        "flags": {"uncited": false, "invalid_citation": false},
+        "final_verdict": "supported",
+        "final_confidence": 0.92,
+        "verifications": [
+          {
+            "source_number": 5,
+            "verdict": "supported",
+            "confidence": 0.92,
+            "evidence_quote": "without observed labor supply reductions or inflationary wage spirals",
+            "explanation": "Directly supported by general equilibrium Kenyan transfer trial."
+          }
+        ]
+      }
+    ],
+    "graph": {
+      "nodes": [
+        {"id": "paper_econ_01", "source_number": 1, "title": "Basic Income: A Radical Proposal", "year": 2017, "citation_count": 2100, "radius": 28.5, "status_color": "neutral", "verification_stats": {"supported": 0, "partial": 0, "unsupported": 0}, "is_bridge": false},
+        {"id": "paper_econ_02", "source_number": 2, "title": "The Aggregate Effect of Universal Cash Transfers", "year": 2022, "citation_count": 520, "radius": 21.0, "status_color": "success", "verification_stats": {"supported": 1, "partial": 0, "unsupported": 0}, "is_bridge": false},
+        {"id": "paper_econ_03", "source_number": 3, "title": "The Finnish Basic Income Experiment", "year": 2020, "citation_count": 410, "radius": 19.5, "status_color": "warning", "verification_stats": {"supported": 0, "partial": 1, "unsupported": 0}, "is_bridge": false},
+        {"id": "paper_econ_04", "source_number": 4, "title": "Evaluating the SEED Experiment", "year": 2021, "citation_count": 290, "radius": 18.0, "status_color": "neutral", "verification_stats": {"supported": 0, "partial": 0, "unsupported": 0}, "is_bridge": false},
+        {"id": "paper_econ_05", "source_number": 5, "title": "General Equilibrium Effects of Cash Transfers", "year": 2022, "citation_count": 640, "radius": 22.0, "status_color": "success", "verification_stats": {"supported": 1, "partial": 0, "unsupported": 0}, "is_bridge": false}
+      ],
+      "edges": [
+        {"source": "paper_econ_02", "target": "paper_econ_01"},
+        {"source": "paper_econ_03", "target": "paper_econ_01"},
+        {"source": "paper_econ_03", "target": "paper_econ_02"},
+        {"source": "paper_econ_04", "target": "paper_econ_01"},
+        {"source": "paper_econ_04", "target": "paper_econ_02"},
+        {"source": "paper_econ_05", "target": "paper_econ_01"},
+        {"source": "paper_econ_05", "target": "paper_econ_02"},
+        {"source": "paper_econ_05", "target": "paper_econ_03"}
+      ]
+    },
+    "created_at": "2026-10-27T00:00:00Z"
+  }
+]

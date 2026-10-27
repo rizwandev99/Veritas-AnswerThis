@@ -1,0 +1,112 @@
+[
+  {
+    "id": "eval_01_transformer_attention",
+    "claim": "Transformers replace recurrent and convolutional layers entirely with self-attention mechanisms.",
+    "paper_id": "paper_vaswani_2017",
+    "paper_title": "Attention Is All You Need",
+    "paper_abstract": "The dominant sequence transduction models are based on complex recurrent or convolutional neural networks that include an encoder and a decoder. The best performing models also connect the encoder and decoder through an attention mechanism. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely. Experiments on two machine translation tasks show these models to be superior in quality while being more parallelizable and requiring significantly less time to train.",
+    "expected_verdict": "supported",
+    "expected_evidence_quote": "dispensing with recurrence and convolutions entirely",
+    "expected_confidence_min": 0.85,
+    "rationale": "Direct textual entailment with verbatim quote in abstract."
+  },
+  {
+    "id": "eval_02_transformer_bleu",
+    "claim": "The Transformer achieves 28.4 BLEU on the WMT 2014 English-to-German translation task.",
+    "paper_id": "paper_vaswani_2017",
+    "paper_title": "Attention Is All You Need",
+    "paper_abstract": "On the WMT 2014 English-to-German translation task, the big transformer model achieves 28.4 BLEU, improving over the existing best results, including ensembles, by over 2 BLEU. On the WMT 2014 English-to-French translation task, our model establishes a new single-model state-of-the-art BLEU score of 41.8 after training for 3.5 days on eight GPUs.",
+    "expected_verdict": "supported",
+    "expected_evidence_quote": "achieves 28.4 BLEU, improving over the existing best results",
+    "expected_confidence_min": 0.90,
+    "rationale": "Quantitative benchmark claim directly matches abstract findings."
+  },
+  {
+    "id": "eval_03_crispr_translocations",
+    "claim": "CRISPR-Cas9 exhibits high on-target cleavage efficiency while completely eliminating all chromosomal rearrangements.",
+    "paper_id": "paper_doudna_2020",
+    "paper_title": "High-throughput evaluation of Cas9 off-target chromosomal translocations",
+    "paper_abstract": "Engineered CRISPR-Cas9 nucleases provide robust genome editing across diverse mammalian cell lines, achieving on-target indel frequencies exceeding 85%. However, structural variants and chromosomal rearrangements remain detectable at low frequencies (0.3-1.2%) in treated hematopoietic stem cells, necessitating targeted high-throughput translocation sequencing.",
+    "expected_verdict": "partial",
+    "expected_evidence_quote": "structural variants and chromosomal rearrangements remain detectable at low frequencies",
+    "expected_confidence_min": 0.75,
+    "rationale": "First clause is supported, but second clause ('completely eliminating') is contradicted by residual 0.3-1.2% rate."
+  },
+  {
+    "id": "eval_04_hydride_superconductivity",
+    "claim": "Nitrogen-doped lutetium hydrides demonstrate zero electrical resistance at ambient room temperature and pressure.",
+    "paper_id": "paper_ming_2023",
+    "paper_title": "Absence of near-ambient superconductivity in LuH2±xNy",
+    "paper_abstract": "We report comprehensive electrical transport and magnetic susceptibility measurements on nitrogen-doped lutetium hydride samples synthesized under high pressure. Across temperatures from 1.5 K to 350 K and pressures up to 30 GPa, no evidence of superconductivity or zero-resistance transitions was observed. The material remains metallic with conventional electron-phonon scattering.",
+    "expected_verdict": "unsupported",
+    "expected_evidence_quote": "no evidence of superconductivity or zero-resistance transitions was observed",
+    "expected_confidence_min": 0.85,
+    "rationale": "Direct contradiction of room temperature superconductivity claim."
+  },
+  {
+    "id": "eval_05_ubi_manufacturing_drop",
+    "claim": "Universal basic income payments cause a 45% drop in national manufacturing labor force participation within six months.",
+    "paper_id": "paper_jones_marinescu_2022",
+    "paper_title": "Labor Market Impacts of Unconditional Cash Transfers",
+    "paper_abstract": "We evaluate the employment effects of unconditional cash transfers across randomized municipal cohorts. Participating households exhibited a modest 1.8 percentage point reduction in annual work hours, concentrated among secondary earners caring for young dependents and adolescents completing secondary education. No statistically significant labor market withdrawal occurred in primary manufacturing sectors.",
+    "expected_verdict": "unsupported",
+    "expected_evidence_quote": "No statistically significant labor market withdrawal occurred in primary manufacturing sectors.",
+    "expected_confidence_min": 0.85,
+    "rationale": "Claim asserts a 45% drop, but abstract explicitly reports no statistically significant withdrawal."
+  },
+  {
+    "id": "eval_06_hallucinated_quote_rejection",
+    "claim": "Semaglutide administration produces a 60% relative risk reduction in myocardial infarction.",
+    "paper_id": "paper_lincoff_2023",
+    "paper_title": "Semaglutide and Cardiovascular Outcomes in Obesity without Diabetes",
+    "paper_abstract": "In this multinational double-blind trial, 17,604 patients with preexisting cardiovascular disease and overweight or obesity were randomized to weekly subcutaneous semaglutide (2.4 mg) or placebo. Over a mean follow-up of 39.8 months, the primary composite cardiovascular end point occurred in 6.5% of semaglutide patients versus 8.0% of placebo patients (hazard ratio, 0.80; 95% CI, 0.72 to 0.90; P<0.001).",
+    "expected_verdict": "unverifiable",
+    "expected_evidence_quote": "semaglutide administration produces a 60% relative risk reduction in myocardial infarction",
+    "expected_confidence_min": 0.0,
+    "rationale": "Adversarial test: the quote is hallucinated/fabricated by the model and is not a substring of the abstract, so it must be rejected as unverifiable."
+  },
+  {
+    "id": "eval_07_surface_code_threshold",
+    "claim": "Surface code quantum error correction requires a physical error rate below the 1% fault-tolerant threshold.",
+    "paper_id": "paper_fowler_2012",
+    "paper_title": "Surface codes: Towards practical large-scale quantum computation",
+    "paper_abstract": "Topological quantum memory based on two-dimensional surface codes provides an exceptionally high fault-tolerance threshold of approximately 1.0% under independent depolarizing circuit noise. When physical gate error rates fall comfortably below this threshold, arbitrary logical error suppression is achieved exponentially with code distance.",
+    "expected_verdict": "supported",
+    "expected_evidence_quote": "high fault-tolerance threshold of approximately 1.0%",
+    "expected_confidence_min": 0.85,
+    "rationale": "Supported with multi-sentence surrounding context and exact numerical threshold match."
+  },
+  {
+    "id": "eval_08_carbon_tax_exaggeration",
+    "claim": "Carbon taxation immediately reduces total national greenhouse gas emissions without affecting any economic growth metrics.",
+    "paper_id": "paper_metcalf_2020",
+    "paper_title": "Measuring the Macroeconomic Impact of Carbon Taxes",
+    "paper_abstract": "Empirical analysis of carbon pricing across 31 European jurisdictions demonstrates an average 4.2% annual reduction in industrial CO2 emissions over the first five years. While aggregate GDP growth remained statistically neutral, energy-intensive trade-exposed sectors experienced localized transitional employment friction.",
+    "expected_verdict": "partial",
+    "expected_evidence_quote": "energy-intensive trade-exposed sectors experienced localized transitional employment friction",
+    "expected_confidence_min": 0.70,
+    "rationale": "GDP was neutral, but localized sector friction occurred, so claims of zero economic friction are only partially substantiated."
+  },
+  {
+    "id": "eval_09_invalid_citation_out_of_bounds",
+    "claim": "State space models achieve linear time complexity during training and inference.",
+    "paper_id": "paper_missing_source",
+    "paper_title": "Nonexistent Paper [99]",
+    "paper_abstract": "",
+    "expected_verdict": "invalid_citation",
+    "expected_evidence_quote": null,
+    "expected_confidence_min": 0.0,
+    "rationale": "Out-of-bounds marker citation with nonexistent paper abstract; must yield invalid_citation without LLM invocation."
+  },
+  {
+    "id": "eval_10_negative_entailment_refutation",
+    "claim": "High-dose vitamin D supplementation prevents acute respiratory tract infections in general adult populations.",
+    "paper_id": "paper_murdoch_2012",
+    "paper_title": "Effect of High-Dose Vitamin D Supplementation on Infection",
+    "paper_abstract": "In this randomized, double-blind, placebo-controlled trial involving 5,110 adult participants, daily supplementation with high-dose vitamin D3 (100,000 IU monthly) did not reduce the incidence or severity of acute respiratory tract infections compared with placebo (hazard ratio, 1.01; 95% CI, 0.92 to 1.11; P=0.85). Subgroup analyses by baseline vitamin D status revealed no preventive benefit.",
+    "expected_verdict": "unsupported",
+    "expected_evidence_quote": "did not reduce the incidence or severity of acute respiratory tract infections compared with placebo",
+    "expected_confidence_min": 0.85,
+    "rationale": "Clear refutation/negative trial finding contradicts the efficacy claim."
+  }
+]
