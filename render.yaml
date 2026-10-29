@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: veritas-api
+    runtime: docker
+    dockerfilePath: apps/api/Dockerfile
+    dockerContext: apps/api
+    plan: free
+    region: oregon
+    healthCheckPath: /api/health
+    envVars:
+      - key: PORT
+        value: "8000"
+      - key: ENVIRONMENT
+        value: production
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: LLM_PROVIDER
+        value: gemini
+      - key: VECTOR_STORE_BACKEND
+        value: faiss
+      - key: OPENALEX_MAILTO
+        value: team@veritas.local
+      - key: CORS_ORIGINS
+        value: "*"
