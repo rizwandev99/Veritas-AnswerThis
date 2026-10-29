@@ -2,7 +2,7 @@
 
 > **Type a research question. Get a streamed, fully cited literature review, where every claim is automatically checked against its cited paper and marked Supported, Partial or Unsupported, plus an interactive citation graph of the papers used.**
 
-[![CI](https://github.com/veritas-ai/veritas/actions/workflows/ci.yml/badge.svg)](https://github.com/veritas-ai/veritas/actions)
+[![CI](https://github.com/rizwandev99/Veritas-AnswerThis/actions/workflows/ci.yml/badge.svg)](https://github.com/rizwandev99/Veritas-AnswerThis/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python 3.12](https://img.shields.io/badge/Python-3.12-blue.svg)](https://www.python.org/)
 [![Next.js 14](https://img.shields.io/badge/Next.js-14-black.svg)](https://nextjs.org/)
