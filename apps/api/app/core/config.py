@@ -67,6 +67,7 @@ class Settings(BaseSettings):
     SEMANTIC_SCHOLAR_API_KEY: str = ""
     GEMINI_API_KEY: str = ""
     GROQ_API_KEY: str = ""
+    LLM_PROVIDER: str = "gemini"
 
     # Rate Limiting
     RATE_LIMIT_PER_MINUTE: int = 60

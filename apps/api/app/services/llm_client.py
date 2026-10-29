@@ -1,8 +1,11 @@
 """
 LLM Client & Grounded Prompt Engineering (PRD §6 F2-AC9, §10 LLM Usage Guidelines).
+Provides live streaming with Google Gemini with robust free-tier fallbacks.
 """
 import asyncio
+import json
 from typing import AsyncIterator, Dict, List, Optional
+import httpx
 from app.models.paper import Paper
 from app.core.config import settings
 from app.core.logging import get_logger
@@ -45,12 +48,57 @@ def build_review_prompt(query: str, papers: List[Paper]) -> str:
 class LLMClient:
     """Manages streaming generation and structured LLM calls with free-tier fallbacks."""
 
-    async def stream_review(self, query: str, papers: List[Paper]) -> AsyncIterator[str]:
-        """
-        Streams generated review tokens.
-        In offline/test mode or without API keys, generates high-quality deterministic grounded reviews.
-        """
-        # Grounded realistic synthesis
+    async def _stream_gemini(self, prompt: str) -> AsyncIterator[str]:
+        api_key = settings.GEMINI_API_KEY
+        models = ["gemini-2.5-flash-lite", "gemini-flash-latest", "gemini-2.5-flash"]
+        for model in models:
+            url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:streamGenerateContent?alt=sse&key={api_key}"
+            payload = {
+                "contents": [{"parts": [{"text": prompt}]}],
+                "generationConfig": {
+                    "temperature": 0.2,
+                    "maxOutputTokens": 2048,
+                },
+            }
+            try:
+                async with httpx.AsyncClient(timeout=30.0) as client:
+                    async with client.stream("POST", url, json=payload) as response:
+                        if response.status_code != 200:
+                            logger.warning(
+                                f"Gemini model {model} returned status {response.status_code}, trying next model"
+                            )
+                            continue
+
+                        yielded_any = False
+                        async for line in response.aiter_lines():
+                            line_str = line.strip()
+                            if not line_str or not line_str.startswith("data: "):
+                                continue
+                            data_json = line_str[6:].strip()
+                            if not data_json:
+                                continue
+                            try:
+                                chunk_obj = json.loads(data_json)
+                                candidates = chunk_obj.get("candidates", [])
+                                if candidates:
+                                    parts = candidates[0].get("content", {}).get("parts", [])
+                                    for part in parts:
+                                        text = part.get("text", "")
+                                        if text:
+                                            yielded_any = True
+                                            yield text
+                            except Exception:
+                                continue
+
+                        if yielded_any:
+                            return
+            except Exception as e:
+                logger.warning(f"Error streaming from Gemini model {model}: {e}")
+                continue
+
+        raise RuntimeError("All Gemini streaming attempts failed.")
+
+    async def _stream_mock(self, query: str) -> AsyncIterator[str]:
         chunks = [
             f"### Introduction\n\nRecent investigations into {query} highlight significant theoretical and practical advances. ",
             f"Core sequence transduction frameworks originally relied on recurrent operations before the advent of self-attention mechanisms [1]. ",
@@ -60,13 +108,28 @@ class LLMClient:
             f"Complementary IO-aware exact formulations such as FlashAttention utilize SRAM tiling to minimize high-bandwidth memory access latencies [3]. ",
             f"\n\n### Conclusion & Open Frontiers\n\nWhile hardware-aware tiling and sparse approximations deliver substantial runtime speedups, scaling to ultra-long contexts remains an active area of empirical inquiry [2][3].",
         ]
-
         for chunk in chunks:
-            # Yield token by token or phrase by phrase with micro-delay for realistic SSE streaming
             words = chunk.split(" ")
             for w in words:
                 yield w + " "
                 await asyncio.sleep(0.015)
+
+    async def stream_review(self, query: str, papers: List[Paper]) -> AsyncIterator[str]:
+        """
+        Streams generated review tokens.
+        Uses Gemini API when configured and available, falling back to deterministic synthesis.
+        """
+        if settings.LLM_PROVIDER in ["gemini", "auto"] and settings.GEMINI_API_KEY:
+            prompt = build_review_prompt(query, papers)
+            try:
+                async for token in self._stream_gemini(prompt):
+                    yield token
+                return
+            except Exception as e:
+                logger.error(f"Live Gemini streaming failed ({e}), falling back to offline synthesizer")
+
+        async for token in self._stream_mock(query):
+            yield token
 
 
 llm_client = LLMClient()

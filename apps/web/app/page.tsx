@@ -30,7 +30,8 @@ export default function LandingPage() {
     setIsSubmitting(true);
     try {
       // Create review request to backend
-      const res = await fetch("http://localhost:8000/api/reviews", {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+      const res = await fetch(`${apiUrl}/api/reviews`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query: query.trim() }),
