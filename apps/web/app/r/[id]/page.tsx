@@ -71,6 +71,8 @@ export default function ReviewPage() {
   const [activeTab, setActiveTab] = useState<"review" | "graph" | "sources">("review");
   const [filterMode, setFilterMode] = useState<"all" | "flagged">("all");
   const [selectedClaim, setSelectedClaim] = useState<Claim | null>(null);
+  const [selectedSource, setSelectedSource] = useState<number | null>(null);
+  const [hoveredNode, setHoveredNode] = useState<number | null>(null);
   const [copied, setCopied] = useState(false);
 
   // Mock papers grounded in PRD eval fixtures
@@ -200,10 +202,11 @@ export default function ReviewPage() {
   const partialCount = claims.filter((c) => c.verdict === "partial").length;
   const trustScore = Math.round(((supportedCount + 0.5 * partialCount) / claims.length) * 100);
 
-  const displayedClaims =
-    filterMode === "flagged"
-      ? claims.filter((c) => c.verdict === "partial" || c.verdict === "unsupported")
-      : claims;
+  const displayedClaims = claims.filter((c) => {
+    if (filterMode === "flagged" && c.verdict === "supported") return false;
+    if (selectedSource !== null && !c.citations.includes(selectedSource)) return false;
+    return true;
+  });
 
   const copyBibtex = () => {
     const bibtex = papers
@@ -329,8 +332,22 @@ export default function ReviewPage() {
               <span className="text-xs font-semibold uppercase tracking-wider text-text-tertiary">
                 Verified Synthesis
               </span>
-              <span className="text-xs text-text-secondary">4 Claims Audited</span>
+              <span className="text-xs text-text-secondary">{displayedClaims.length} Claims Shown</span>
             </div>
+
+            {selectedSource !== null && (
+              <div className="flex items-center justify-between px-3 py-2 rounded-md bg-accent/10 border border-accent/30 text-xs">
+                <span className="text-accent font-medium flex items-center gap-1.5">
+                  <span className="font-mono font-bold">[{selectedSource}]</span> Filter active: {papers.find(p => p.source_num === selectedSource)?.title}
+                </span>
+                <button
+                  onClick={() => setSelectedSource(null)}
+                  className="text-text-tertiary hover:text-text-primary text-[11px] underline ml-2"
+                >
+                  Clear filter
+                </button>
+              </div>
+            )}
 
             <div className="space-y-4 text-sm leading-relaxed text-text-primary">
               {displayedClaims.map((claim) => {
@@ -524,18 +541,225 @@ export default function ReviewPage() {
           )}
 
           {activeTab === "graph" && (
-            <Card elevated className="p-5 space-y-3 sticky top-20">
+            <Card elevated className="p-5 space-y-4 sticky top-20">
               <div className="flex items-center justify-between border-b border-border pb-3">
-                <span className="text-xs font-semibold uppercase tracking-wider text-text-tertiary">
-                  Citation Network Graph
-                </span>
-                <span className="text-xs text-text-secondary">3 Nodes • 2 Edges</span>
+                <div>
+                  <span className="text-xs font-semibold uppercase tracking-wider text-text-tertiary">
+                    Citation Network Graph
+                  </span>
+                  <p className="text-[11px] text-text-tertiary">Click any node to filter claims</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  {selectedSource !== null && (
+                    <button
+                      onClick={() => setSelectedSource(null)}
+                      className="text-[11px] text-accent hover:underline font-mono"
+                    >
+                      Reset filter
+                    </button>
+                  )}
+                  <span className="text-xs font-mono text-text-secondary bg-surface px-2 py-0.5 rounded border border-border">
+                    3 Nodes • 2 Edges
+                  </span>
+                </div>
               </div>
-              <div className="h-64 rounded-md border border-dashed border-border flex flex-col items-center justify-center p-4 text-center bg-surface">
-                <Network className="w-8 h-8 text-accent mb-2 animate-pulse" />
-                <span className="text-xs font-semibold text-text-primary">Interactive Citation Topology</span>
-                <span className="text-[11px] text-text-tertiary mt-1 max-w-xs">
-                  Nodes scaled by citation volume; colored by claim verification support rate. Pan, zoom, and select nodes to filter review sentences.
+
+              {/* Interactive SVG Network */}
+              <div className="relative rounded-lg bg-surface border border-border overflow-hidden">
+                <svg
+                  viewBox="0 0 460 260"
+                  className="w-full h-64 select-none"
+                >
+                  <defs>
+                    <marker
+                      id="arrow"
+                      viewBox="0 0 10 10"
+                      refX="26"
+                      refY="5"
+                      markerWidth="6"
+                      markerHeight="6"
+                      orient="auto-start-reverse"
+                    >
+                      <path d="M 0 1 L 9 5 L 0 9 z" fill="#64748b" opacity="0.7" />
+                    </marker>
+                    <marker
+                      id="arrow-active"
+                      viewBox="0 0 10 10"
+                      refX="26"
+                      refY="5"
+                      markerWidth="6"
+                      markerHeight="6"
+                      orient="auto-start-reverse"
+                    >
+                      <path d="M 0 1 L 9 5 L 0 9 z" fill="#6366f1" />
+                    </marker>
+                  </defs>
+
+                  {/* Edge: Longformer [2] -> Attention Is All You Need [1] */}
+                  <path
+                    d="M 135 75 Q 230 75 305 118"
+                    fill="none"
+                    stroke={selectedSource === 2 || selectedSource === 1 ? "#6366f1" : "#475569"}
+                    strokeWidth={selectedSource === 2 || selectedSource === 1 ? 2.5 : 1.5}
+                    strokeDasharray={selectedSource === 2 ? "4 2" : "none"}
+                    markerEnd={selectedSource === 2 || selectedSource === 1 ? "url(#arrow-active)" : "url(#arrow)"}
+                    className="transition-colors duration-200"
+                  />
+
+                  {/* Edge: FlashAttention [3] -> Attention Is All You Need [1] */}
+                  <path
+                    d="M 135 185 Q 230 185 305 142"
+                    fill="none"
+                    stroke={selectedSource === 3 || selectedSource === 1 ? "#6366f1" : "#475569"}
+                    strokeWidth={selectedSource === 3 || selectedSource === 1 ? 2.5 : 1.5}
+                    strokeDasharray={selectedSource === 3 ? "4 2" : "none"}
+                    markerEnd={selectedSource === 3 || selectedSource === 1 ? "url(#arrow-active)" : "url(#arrow)"}
+                    className="transition-colors duration-200"
+                  />
+
+                  {/* Edge: FlashAttention [3] -> Longformer [2] */}
+                  <path
+                    d="M 110 162 L 110 98"
+                    fill="none"
+                    stroke={selectedSource === 3 || selectedSource === 2 ? "#6366f1" : "#475569"}
+                    strokeWidth={selectedSource === 3 || selectedSource === 2 ? 2.5 : 1.5}
+                    markerEnd={selectedSource === 3 || selectedSource === 2 ? "url(#arrow-active)" : "url(#arrow)"}
+                    className="transition-colors duration-200"
+                  />
+
+                  {/* Node 1: Attention Is All You Need (125k citations, Vaswani 2017) */}
+                  <g
+                    onClick={() => setSelectedSource(prev => prev === 1 ? null : 1)}
+                    onMouseEnter={() => setHoveredNode(1)}
+                    onMouseLeave={() => setHoveredNode(null)}
+                    className="cursor-pointer group"
+                  >
+                    {selectedSource === 1 && (
+                      <circle cx="340" cy="130" r="42" fill="none" stroke="#6366f1" strokeWidth="2" strokeDasharray="3 3" />
+                    )}
+                    <circle
+                      cx="340"
+                      cy="130"
+                      r="36"
+                      fill="#18181b"
+                      stroke={selectedSource === 1 ? "#6366f1" : "#10b981"}
+                      strokeWidth={selectedSource === 1 ? 3 : 2}
+                      className="group-hover:stroke-accent transition-all duration-200"
+                    />
+                    <text x="340" y="125" textAnchor="middle" fill="#f8fafc" fontSize="13" fontWeight="bold" fontFamily="monospace">
+                      [1]
+                    </text>
+                    <text x="340" y="142" textAnchor="middle" fill="#94a3b8" fontSize="10">
+                      2017
+                    </text>
+                    <text x="340" y="180" textAnchor="middle" fill="#e2e8f0" fontSize="11" fontWeight="500">
+                      Vaswani et al.
+                    </text>
+                    <text x="340" y="195" textAnchor="middle" fill="#64748b" fontSize="10">
+                      125k cites • 100%
+                    </text>
+                  </g>
+
+                  {/* Node 2: Longformer (3.2k citations, Beltagy 2020) */}
+                  <g
+                    onClick={() => setSelectedSource(prev => prev === 2 ? null : 2)}
+                    onMouseEnter={() => setHoveredNode(2)}
+                    onMouseLeave={() => setHoveredNode(null)}
+                    className="cursor-pointer group"
+                  >
+                    {selectedSource === 2 && (
+                      <circle cx="110" cy="70" r="30" fill="none" stroke="#6366f1" strokeWidth="2" strokeDasharray="3 3" />
+                    )}
+                    <circle
+                      cx="110"
+                      cy="70"
+                      r="24"
+                      fill="#18181b"
+                      stroke={selectedSource === 2 ? "#6366f1" : "#10b981"}
+                      strokeWidth={selectedSource === 2 ? 3 : 2}
+                      className="group-hover:stroke-accent transition-all duration-200"
+                    />
+                    <text x="110" y="66" textAnchor="middle" fill="#f8fafc" fontSize="12" fontWeight="bold" fontFamily="monospace">
+                      [2]
+                    </text>
+                    <text x="110" y="80" textAnchor="middle" fill="#94a3b8" fontSize="9">
+                      2020
+                    </text>
+                    <text x="110" y="106" textAnchor="middle" fill="#e2e8f0" fontSize="11" fontWeight="500">
+                      Longformer
+                    </text>
+                    <text x="110" y="119" textAnchor="middle" fill="#64748b" fontSize="10">
+                      3.2k cites • 100%
+                    </text>
+                  </g>
+
+                  {/* Node 3: FlashAttention (4.8k citations, Dao 2022) */}
+                  <g
+                    onClick={() => setSelectedSource(prev => prev === 3 ? null : 3)}
+                    onMouseEnter={() => setHoveredNode(3)}
+                    onMouseLeave={() => setHoveredNode(null)}
+                    className="cursor-pointer group"
+                  >
+                    {selectedSource === 3 && (
+                      <circle cx="110" cy="190" r="32" fill="none" stroke="#6366f1" strokeWidth="2" strokeDasharray="3 3" />
+                    )}
+                    <circle
+                      cx="110"
+                      cy="190"
+                      r="26"
+                      fill="#18181b"
+                      stroke={selectedSource === 3 ? "#6366f1" : "#f59e0b"}
+                      strokeWidth={selectedSource === 3 ? 3 : 2}
+                      className="group-hover:stroke-accent transition-all duration-200"
+                    />
+                    <text x="110" y="186" textAnchor="middle" fill="#f8fafc" fontSize="12" fontWeight="bold" fontFamily="monospace">
+                      [3]
+                    </text>
+                    <text x="110" y="200" textAnchor="middle" fill="#94a3b8" fontSize="9">
+                      2022
+                    </text>
+                    <text x="110" y="228" textAnchor="middle" fill="#e2e8f0" fontSize="11" fontWeight="500">
+                      FlashAttention
+                    </text>
+                    <text x="110" y="241" textAnchor="middle" fill="#64748b" fontSize="10">
+                      4.8k cites • 67%
+                    </text>
+                  </g>
+                </svg>
+              </div>
+
+              {/* Dynamic Node Details Banner */}
+              {(() => {
+                const activeNum = hoveredNode || selectedSource || 1;
+                const activePaper = papers.find(p => p.source_num === activeNum);
+                if (!activePaper) return null;
+                return (
+                  <div className="p-3 rounded-lg bg-surface border border-border text-xs space-y-1.5 transition-all">
+                    <div className="flex items-center justify-between">
+                      <span className="font-mono font-bold text-accent">Source [{activePaper.source_num}]</span>
+                      <span className="font-mono text-text-tertiary">{activePaper.year} • {activePaper.venue}</span>
+                    </div>
+                    <div className="font-medium text-text-primary text-xs line-clamp-1">{activePaper.title}</div>
+                    <div className="flex items-center justify-between text-[11px] text-text-secondary pt-1 border-t border-border/50">
+                      <span>{activePaper.citation_count.toLocaleString()} citations</span>
+                      <span className="font-semibold text-success">
+                        {activePaper.support_rate ? `${Math.round(activePaper.support_rate * 100)}% Verified Support` : "100% Verified"}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })()}
+
+              {/* Topology Legend */}
+              <div className="flex items-center justify-between text-[11px] text-text-tertiary px-1 pt-1 border-t border-border">
+                <span className="flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" /> ≥80% Support
+                </span>
+                <span className="flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-amber-500 inline-block" /> Partial
+                </span>
+                <span className="flex items-center gap-1">
+                  <span className="font-mono text-text-secondary">A → B</span> Cites
                 </span>
               </div>
             </Card>
