@@ -19,9 +19,13 @@ async def get_health(response: Response):
     db_connected = db_health.get("connected", False)
     pgvector_ok = db_health.get("pgvector", False)
 
-    if not db_connected:
+    if not db_connected and settings.VECTOR_STORE_BACKEND == "pgvector":
         response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
         overall_status = "unhealthy"
+        db_status = "disconnected"
+    elif not db_connected:
+        response.status_code = status.HTTP_200_OK
+        overall_status = "healthy"
         db_status = "disconnected"
     elif not pgvector_ok:
         response.status_code = status.HTTP_200_OK
